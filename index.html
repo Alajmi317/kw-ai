@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kwai AI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kwai AI Chat</title>
+
+  <!-- خط عربي لطيف (اختياري) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
 
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: 'Tajawal', sans-serif;
-      background: #0d0d0f;
-      color: #fff;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Tajawal', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at top left, #1f2937 0, #020617 40%, #000 100%);
+      color: #e5e7eb;
       display: flex;
       height: 100vh;
       overflow: hidden;
@@ -18,158 +33,366 @@
 
     /* الشريط الجانبي */
     .sidebar {
-      width: 240px;
-      background: #111113;
-      border-left: 1px solid #222;
-      padding: 20px;
+      width: 260px;
+      padding: 20px 18px;
+      background: rgba(3, 7, 18, 0.9);
+      border-left: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(14px);
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
-    .sidebar h2 {
-      margin: 0;
-      font-size: 22px;
-      color: #38bdf8;
+    .logo-box {
+      padding: 14px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow:
+        0 0 18px rgba(56, 189, 248, 0.35),
+        0 0 40px rgba(59, 130, 246, 0.3);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
       text-align: center;
     }
 
-    .sidebar button {
-      background: #1a1a1c;
+    .logo-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      color: #38bdf8;
+      text-shadow:
+        0 0 10px rgba(56, 189, 248, 0.9),
+        0 0 25px rgba(59, 130, 246, 0.7);
+    }
+
+    .logo-sub {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .side-heading {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .side-btn {
+      width: 100%;
+      padding: 11px 10px;
+      margin-top: 4px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, #020617, #020617);
       color: #e5e7eb;
-      border: 1px solid #333;
-      padding: 12px;
-      border-radius: 10px;
+      font-size: 14px;
+      text-align: right;
       cursor: pointer;
-      font-size: 15px;
-      text-align: center;
-      transition: 0.2s;
+      transition: 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .sidebar button:hover {
+    .side-btn span {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .side-btn:hover {
       border-color: #38bdf8;
-      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+      color: #f9fafb;
     }
 
-    /* منطقة المحادثة */
-    .chat-container {
+    .side-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding-top: 10px;
+    }
+
+    /* منطقة الشات */
+    .chat-wrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
-      position: relative;
+      height: 100%;
+    }
+
+    .chat-header {
+      padding: 14px 26px;
+      border-bottom: 1px solid rgba(30, 64, 175, 0.7);
+      background: linear-gradient(to left, rgba(15, 23, 42, 0.95), rgba(3, 7, 18, 0.9));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header-title {
+      font-size: 15px;
+      color: #e5e7eb;
+    }
+
+    .chat-header-badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(52, 211, 153, 0.8);
+      color: #bbf7d0;
+      background: radial-gradient(circle at top, rgba(22, 163, 74, 0.2), transparent);
+      box-shadow: 0 0 14px rgba(22, 163, 74, 0.7);
     }
 
     .messages {
       flex: 1;
+      padding: 20px 28px 16px;
       overflow-y: auto;
-      padding: 20px 40px;
+      position: relative;
+    }
+
+    /* خطوط خفيفة بالخلفية */
+    .messages::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(15, 23, 42, 0.7) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.7) 1px, transparent 1px);
+      background-size: 38px 38px;
+      opacity: 0.28;
+      pointer-events: none;
     }
 
     .message {
-      background: #1a1a1c;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      max-width: 80%;
+      position: relative;
+      max-width: 75%;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
       font-size: 15px;
       line-height: 1.6;
+      z-index: 1;
+    }
+
+    .message small {
+      display: block;
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 4px;
     }
 
     /* رسالة المستخدم */
-    .user {
-      background: #0f172a;
+    .message.user {
       margin-left: auto;
-      border-right: 4px solid #38bdf8;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      box-shadow:
+        0 0 12px rgba(56, 189, 248, 0.6),
+        0 0 32px rgba(59, 130, 246, 0.4);
     }
 
-    /* رسالة الذكاء الاصطناعي */
-    .ai {
-      background: #1a1a1c;
-      border-left: 4px solid #38bdf8;
+    /* رسالة Kwai */
+    .message.ai {
+      margin-right: 0;
+      background: radial-gradient(circle at top right, #111827, #020617);
+      border: 1px solid rgba(129, 140, 248, 0.6);
+      box-shadow:
+        0 0 12px rgba(129, 140, 248, 0.7),
+        0 0 32px rgba(37, 99, 235, 0.5);
     }
 
     /* صندوق الإدخال */
-    .input-box {
-      padding: 15px 20px;
-      background: #111113;
-      border-top: 1px solid #222;
+    .input-area {
+      padding: 12px 22px 16px;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(3, 7, 18, 0.9));
+    }
+
+    .input-inner {
+      max-width: 900px;
+      margin: 0 auto;
       display: flex;
       gap: 10px;
+      align-items: center;
     }
 
-    .input-box input {
+    .input-inner input {
       flex: 1;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #333;
-      background: #0f0f11;
-      color: white;
-      font-size: 16px;
+      padding: 14px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top, #020617, #020617);
+      color: #f9fafb;
+      font-size: 15px;
+      outline: none;
+      box-shadow: 0 0 12px rgba(15, 23, 42, 0.9);
+      transition: 0.18s ease;
     }
 
-    .input-box button {
-      padding: 15px 20px;
-      border-radius: 10px;
-      background: #38bdf8;
+    .input-inner input::placeholder {
+      color: #6b7280;
+    }
+
+    .input-inner input:focus {
+      border-color: #38bdf8;
+      box-shadow:
+        0 0 16px rgba(56, 189, 248, 0.7),
+        0 0 40px rgba(59, 130, 246, 0.5);
+    }
+
+    .send-btn {
+      padding: 13px 20px;
+      border-radius: 999px;
       border: none;
-      color: #000;
+      background: radial-gradient(circle at top left, #38bdf8, #6366f1);
+      color: #020617;
+      font-weight: 700;
+      font-size: 14px;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 16px;
-      transition: 0.2s;
+      white-space: nowrap;
+      box-shadow:
+        0 0 18px rgba(56, 189, 248, 0.85),
+        0 0 38px rgba(99, 102, 241, 0.7);
+      transition: transform 0.12s ease, box-shadow 0.18s ease, opacity 0.12s ease;
     }
 
-    .input-box button:hover {
+    .send-btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+      box-shadow:
+        0 0 22px rgba(56, 189, 248, 0.95),
+        0 0 48px rgba(129, 140, 248, 0.9);
+    }
+
+    .send-btn:active {
+      transform: translateY(1px) scale(0.99);
       opacity: 0.85;
+    }
+
+    /* موبايل */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .chat-header {
+        padding-inline: 16px;
+      }
+      .messages {
+        padding-inline: 14px;
+      }
+      .message {
+        max-width: 88%;
+      }
+      .input-area {
+        padding-inline: 12px;
+      }
     }
   </style>
 </head>
 <body>
 
   <!-- الشريط الجانبي -->
-  <div class="sidebar">
-    <h2>Kwai AI</h2>
-
-    <button>محادثة جديدة</button>
-    <button>السجل</button>
-    <button>الإعدادات</button>
-    <button>حول Kwai</button>
-  </div>
-
-  <!-- منطقة المحادثة -->
-  <div class="chat-container">
-
-    <div class="messages" id="messages">
-      <div class="message ai">مرحباً بك في Kwai… كيف أقدر أساعدك؟</div>
+  <aside class="sidebar">
+    <div class="logo-box">
+      <div class="logo-title">KWAI</div>
+      <div class="logo-sub">مساعد ذكاء اصطناعي كويتي</div>
     </div>
 
-    <div class="input-box">
-      <input id="input" type="text" placeholder="اكتب رسالتك هنا…">
-      <button onclick="sendMessage()">إرسال</button>
+    <div>
+      <div class="side-heading">الجلسات</div>
+      <button class="side-btn">
+        محادثة جديدة
+        <span>Ctrl + N</span>
+      </button>
+      <button class="side-btn">
+        السجل
+        <span>قريباً</span>
+      </button>
     </div>
-  </div>
+
+    <div>
+      <div class="side-heading">النظام</div>
+      <button class="side-btn">
+        إعدادات Kwai
+        <span>قريباً</span>
+      </button>
+      <button class="side-btn">
+        عن Kwai
+        <span>v0.1</span>
+      </button>
+    </div>
+
+    <div class="side-footer">
+      Kwai · نموذج تجريبي  
+      حالياً بدون ربط API حقيقي،  
+      لكن جاهز للربط لاحقاً.
+    </div>
+  </aside>
+
+  <!-- منطقة الشات -->
+  <main class="chat-wrapper">
+    <header class="chat-header">
+      <div class="chat-header-title">
+        مرحباً بك في <strong>Kwai</strong>… اسألني أي شيء بالعربي أو الإنجليزي.
+      </div>
+      <div class="chat-header-badge">
+        وضع نيون · تجربة مبكرة
+      </div>
+    </header>
+
+    <section class="messages" id="messages">
+      <div class="message ai">
+        أهلاً، أنا <strong>Kwai</strong>، مساعد ذكاء اصطناعي بواجهة نيون مستقبلية.
+        <br>
+        اكتب سؤالك في الأسفل واضغط إرسال.
+        <small>نموذج تجريبي · الردود حالياً ليست حقيقية 100%</small>
+      </div>
+    </section>
+
+    <footer class="input-area">
+      <div class="input-inner">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="اكتب رسالتك هنا... ثم اضغط Enter أو زر إرسال"
+          onkeydown="if (event.key === 'Enter') sendMessage();"
+        />
+        <button class="send-btn" onclick="sendMessage()">إرسال</button>
+      </div>
+    </footer>
+  </main>
 
   <script>
     function sendMessage() {
-      const input = document.getElementById("input");
-      const messages = document.getElementById("messages");
+      const input = document.getElementById('userInput');
+      const messages = document.getElementById('messages');
+      const text = input.value.trim();
 
-      if (input.value.trim() === "") return;
+      if (!text) return;
 
       // رسالة المستخدم
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.textContent = input.value;
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = text;
       messages.appendChild(userMsg);
 
-      // رد الذكاء الاصطناعي (وهمي الآن)
-      const aiMsg = document.createElement("div");
-      aiMsg.className = "message ai";
-      aiMsg.textContent = "جارٍ المعالجة… (لاحقاً نربطها بذكاء اصطناعي حقيقي)";
+      // الرد التجريبي من Kwai
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'message ai';
+      aiMsg.innerHTML =
+        'تم استلام سؤالك 👌<br>' +
+        'في النسخة الجاية بنربط <strong>Kwai</strong> بنموذج ذكاء اصطناعي حقيقي، ' +
+        'لكن الآن أقدر أظهر لك أنه جاهز للشغل.';
+
       messages.appendChild(aiMsg);
 
+      // نزول لأسفل المحادثة
       messages.scrollTop = messages.scrollHeight;
-      input.value = "";
+
+      // تفريغ الخانة
+      input.value = '';
+      input.focus();
     }
   </script>
 
