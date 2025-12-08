@@ -8,7 +8,7 @@ app.use(express.json());
 
 // ضع مفتاح API حقك هنا
 const client = new OpenAI({
-  apiKey: "YOUR_API_KEY_HERE"
+  apiKey: "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"
 });
 
 app.post("/kwai", async (req, res) => {
