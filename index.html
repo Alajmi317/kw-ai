@@ -763,6 +763,47 @@ onclick="window.open('https://discord.gg/MT-3')">
 
 </footer>
 
+  <script>
+const WEBHOOK_URL = "YOUR_WEBHOOK_URL";
+
+async function sendOrder(product, price) {
+
+let discordUser = prompt("اكتب اسمك في ديسكورد:");
+if (!discordUser) return alert("لازم تكتب اسم الديسكورد");
+
+let paymentMethod = prompt("طريقة الدفع (تحويل / بطاقة / رصيد...):");
+if (!paymentMethod) return alert("لازم تحدد طريقة الدفع");
+
+const payload = {
+content: "🛒 طلب جديد في MINITY STORE",
+embeds: [{
+title: "Order Details",
+color: 0x9b5cff,
+fields: [
+{ name: "المنتج", value: product, inline: true },
+{ name: "السعر", value: price, inline: true },
+{ name: "يوزر الديسكورد", value: discordUser, inline: false },
+{ name: "طريقة الدفع", value: paymentMethod, inline: false }
+]
+}]
+};
+
+try {
+await fetch(WEBHOOK_URL, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(payload)
+});
+
+alert("تم إرسال الطلب بنجاح!");
+} catch (err) {
+alert("فشل إرسال الطلب");
+console.error(err);
+}
+
+}
+</script>
+
 </body>
 </html>
 ```
