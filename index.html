@@ -1,418 +1,768 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kwai AI Chat</title>
 
-  <!-- خط عربي لطيف (اختياري) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<title>MINITY STORE</title>
 
-    html, body {
-      height: 100%;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
-    body {
-      font-family: 'Tajawal', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background:
-        radial-gradient(circle at top left, #1f2937 0, #020617 40%, #000 100%);
-      color: #e5e7eb;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-    body, * {
-      font-family: 'Cairo', sans-serif !important;
-      font-weight: 900 !important; /* نفس ثقل الخط اللي بالصورة */
-    }
+<style>
 
-    
-    /* الشريط الجانبي */
-    .sidebar {
-      width: 260px;
-      padding: 20px 18px;
-      background: rgba(3, 7, 18, 0.9);
-      border-left: 1px solid rgba(148, 163, 184, 0.3);
-      backdrop-filter: blur(14px);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Tajawal',sans-serif;
+scroll-behavior:smooth;
+}
 
-    .logo-box {
-      padding: 14px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      box-shadow:
-        0 0 18px rgba(56, 189, 248, 0.35),
-        0 0 40px rgba(59, 130, 246, 0.3);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
-      text-align: center;
-    }
+body{
+background:#050505;
+color:white;
+overflow-x:hidden;
+}
 
-    .logo-title {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      color: #38bdf8;
-      text-shadow:
-        0 0 10px rgba(56, 189, 248, 0.9),
-        0 0 25px rgba(59, 130, 246, 0.7);
-    }
+/* BACKGROUND */
 
-    .logo-sub {
-      margin-top: 4px;
-      font-size: 13px;
-      color: #9ca3af;
-    }
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:-2;
+background:
+radial-gradient(circle at top right,#9b5cff33,transparent 25%),
+radial-gradient(circle at bottom left,#7b2cff22,transparent 30%),
+#050505;
+}
 
-    .side-heading {
-      margin-top: 4px;
-      font-size: 13px;
-      color: #6b7280;
-    }
+.grid{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:-1;
+background-image:
+linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
 
-    .side-btn {
-      width: 100%;
-      padding: 11px 10px;
-      margin-top: 4px;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top left, #020617, #020617);
-      color: #e5e7eb;
-      font-size: 14px;
-      text-align: right;
-      cursor: pointer;
-      transition: 0.18s ease;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+background-size:50px 50px;
+opacity:.15;
+}
 
-    .side-btn span {
-      font-size: 12px;
-      color: #6b7280;
-    }
+/* NAVBAR */
 
-    .side-btn:hover {
-      border-color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
-      color: #f9fafb;
-    }
+header{
+position:fixed;
+top:0;
+width:100%;
+z-index:999;
+backdrop-filter:blur(16px);
+background:rgba(0,0,0,.45);
+border-bottom:1px solid rgba(255,255,255,.06);
+}
 
-    .side-footer {
-      margin-top: auto;
-      font-size: 11px;
-      color: #6b7280;
-      border-top: 1px solid rgba(31, 41, 55, 0.9);
-      padding-top: 10px;
-    }
+.container{
+width:92%;
+max-width:1500px;
+margin:auto;
+}
 
-    /* منطقة الشات */
-    .chat-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
+.nav{
+height:90px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
 
-    .chat-header {
-      padding: 14px 26px;
-      border-bottom: 1px solid rgba(30, 64, 175, 0.7);
-      background: linear-gradient(to left, rgba(15, 23, 42, 0.95), rgba(3, 7, 18, 0.9));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+}
 
-    .chat-header-title {
-      font-size: 15px;
-      color: #e5e7eb;
-    }
+.logo img{
+width:55px;
+filter:drop-shadow(0 0 20px #9b5cff);
+}
 
-    .chat-header-badge {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(52, 211, 153, 0.8);
-      color: #bbf7d0;
-      background: radial-gradient(circle at top, rgba(22, 163, 74, 0.2), transparent);
-      box-shadow: 0 0 14px rgba(22, 163, 74, 0.7);
-    }
+.logo h1{
+font-size:33px;
+font-weight:800;
+background:linear-gradient(90deg,#ffffff,#9b5cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-    .messages {
-      flex: 1;
-      padding: 20px 28px 16px;
-      overflow-y: auto;
-      position: relative;
-    }
+.links{
+display:flex;
+gap:35px;
+}
 
-    /* خطوط خفيفة بالخلفية */
-    .messages::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(15, 23, 42, 0.7) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 23, 42, 0.7) 1px, transparent 1px);
-      background-size: 38px 38px;
-      opacity: 0.28;
-      pointer-events: none;
-    }
+.links a{
+position:relative;
+font-weight:600;
+transition:.3s;
+}
 
-    .message {
-      position: relative;
-      max-width: 75%;
-      padding: 12px 14px;
-      margin-bottom: 12px;
-      border-radius: 14px;
-      font-size: 15px;
-      line-height: 1.6;
-      z-index: 1;
-    }
+.links a::after{
+content:'';
+position:absolute;
+bottom:-10px;
+right:0;
+width:0%;
+height:2px;
+background:#9b5cff;
+transition:.3s;
+}
 
-    .message small {
-      display: block;
-      font-size: 11px;
-      opacity: 0.8;
-      margin-top: 4px;
-    }
+.links a:hover{
+color:#9b5cff;
+}
 
-    /* رسالة المستخدم */
-    .message.user {
-      margin-left: auto;
-      background: radial-gradient(circle at top left, #0f172a, #020617);
-      border: 1px solid rgba(56, 189, 248, 0.6);
-      box-shadow:
-        0 0 12px rgba(56, 189, 248, 0.6),
-        0 0 32px rgba(59, 130, 246, 0.4);
-    }
+.links a:hover::after{
+width:100%;
+}
 
-    /* رسالة Kwai */
-    .message.ai {
-      margin-right: 0;
-      background: radial-gradient(circle at top right, #111827, #020617);
-      border: 1px solid rgba(129, 140, 248, 0.6);
-      box-shadow:
-        0 0 12px rgba(129, 140, 248, 0.7),
-        0 0 32px rgba(37, 99, 235, 0.5);
-    }
+.login{
+padding:13px 30px;
+border-radius:14px;
+background:linear-gradient(135deg,#7b2cff,#9b5cff);
+font-weight:700;
+cursor:pointer;
+border:none;
+color:white;
+transition:.3s;
+}
 
-    /* صندوق الإدخال */
-    .input-area {
-      padding: 12px 22px 16px;
-      border-top: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(3, 7, 18, 0.9));
-    }
+.login:hover{
+transform:translateY(-4px);
+box-shadow:0 0 30px #9b5cff;
+}
 
-    .input-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+/* HERO */
 
-    .input-inner input {
-      flex: 1;
-      padding: 14px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      background: radial-gradient(circle at top, #020617, #020617);
-      color: #f9fafb;
-      font-size: 15px;
-      outline: none;
-      box-shadow: 0 0 12px rgba(15, 23, 42, 0.9);
-      transition: 0.18s ease;
-    }
+.hero{
+padding-top:170px;
+padding-bottom:90px;
+}
 
-    .input-inner input::placeholder {
-      color: #6b7280;
-    }
+.hero-wrap{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:70px;
+align-items:center;
+}
 
-    .input-inner input:focus {
-      border-color: #38bdf8;
-      box-shadow:
-        0 0 16px rgba(56, 189, 248, 0.7),
-        0 0 40px rgba(59, 130, 246, 0.5);
-    }
+.hero-img{
+position:relative;
+display:flex;
+justify-content:center;
+}
 
-    .send-btn {
-      padding: 13px 20px;
-      border-radius: 999px;
-      border: none;
-      background: radial-gradient(circle at top left, #38bdf8, #6366f1);
-      color: #020617;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      white-space: nowrap;
-      box-shadow:
-        0 0 18px rgba(56, 189, 248, 0.85),
-        0 0 38px rgba(99, 102, 241, 0.7);
-      transition: transform 0.12s ease, box-shadow 0.18s ease, opacity 0.12s ease;
-    }
+.hero-img::before{
+content:'';
+position:absolute;
+width:500px;
+height:500px;
+background:#9b5cff22;
+filter:blur(120px);
+border-radius:50%;
+}
 
-    .send-btn:hover {
-      transform: translateY(-1px);
-      opacity: 0.92;
-      box-shadow:
-        0 0 22px rgba(56, 189, 248, 0.95),
-        0 0 48px rgba(129, 140, 248, 0.9);
-    }
+.hero-img img{
+width:100%;
+max-width:650px;
+position:relative;
+z-index:2;
+animation:float 4s ease-in-out infinite;
+}
 
-    .send-btn:active {
-      transform: translateY(1px) scale(0.99);
-      opacity: 0.85;
-    }
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-18px);}
+100%{transform:translateY(0);}
+}
 
-    /* موبايل */
-    @media (max-width: 768px) {
-      .sidebar {
-        display: none;
-      }
-      .chat-header {
-        padding-inline: 16px;
-      }
-      .messages {
-        padding-inline: 14px;
-      }
-      .message {
-        max-width: 88%;
-      }
-      .input-area {
-        padding-inline: 12px;
-      }
-    }
+.hero-text h1{
+font-size:95px;
+line-height:1.1;
+margin-bottom:20px;
+font-weight:800;
+background:linear-gradient(90deg,#ffffff,#9b5cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-    
-  </style>
+.hero-text p{
+font-size:24px;
+line-height:1.8;
+color:#cfcfcf;
+margin-bottom:35px;
+}
+
+.hero-buttons{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.btn{
+padding:18px 40px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+font-size:17px;
+font-weight:700;
+transition:.35s;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,#7b2cff,#9b5cff);
+color:white;
+box-shadow:0 0 35px rgba(155,92,255,.3);
+}
+
+.btn-primary:hover{
+transform:translateY(-5px);
+box-shadow:0 0 45px rgba(155,92,255,.5);
+}
+
+.btn-dark{
+background:#101010;
+border:1px solid #2a2a2a;
+color:white;
+}
+
+.btn-dark:hover{
+border-color:#9b5cff;
+}
+
+/* FEATURES */
+
+.features{
+margin-top:70px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
+}
+
+.feature{
+background:rgba(12,12,12,.8);
+border:1px solid #1f1f1f;
+padding:30px;
+border-radius:22px;
+backdrop-filter:blur(12px);
+transition:.3s;
+}
+
+.feature:hover{
+transform:translateY(-8px);
+border-color:#9b5cff;
+}
+
+.feature i{
+font-size:35px;
+margin-bottom:18px;
+color:#9b5cff;
+}
+
+.feature h3{
+font-size:25px;
+margin-bottom:10px;
+}
+
+.feature p{
+color:#a9a9a9;
+line-height:1.7;
+}
+
+/* SECTION */
+
+.section{
+padding:120px 0;
+}
+
+.section-title{
+font-size:55px;
+text-align:center;
+margin-bottom:15px;
+font-weight:800;
+}
+
+.section-desc{
+text-align:center;
+color:#9d9d9d;
+margin-bottom:70px;
+font-size:18px;
+}
+
+/* PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:30px;
+}
+
+.card{
+position:relative;
+overflow:hidden;
+background:rgba(12,12,12,.85);
+border:1px solid #1f1f1f;
+border-radius:30px;
+padding:35px;
+transition:.4s;
+}
+
+.card::before{
+content:'';
+position:absolute;
+top:-120px;
+left:-120px;
+width:250px;
+height:250px;
+background:#9b5cff18;
+border-radius:50%;
+filter:blur(20px);
+}
+
+.card:hover{
+transform:translateY(-12px);
+border-color:#9b5cff;
+box-shadow:0 0 40px rgba(155,92,255,.18);
+}
+
+.card h3{
+font-size:45px;
+margin-bottom:20px;
+}
+
+.card ul{
+list-style:none;
+margin-bottom:30px;
+}
+
+.card ul li{
+margin-bottom:14px;
+color:#c4c4c4;
+}
+
+.card ul li i{
+color:#9b5cff;
+margin-left:8px;
+}
+
+.price{
+font-size:55px;
+font-weight:800;
+color:#9b5cff;
+margin-bottom:25px;
+}
+
+.buy{
+width:100%;
+padding:16px;
+border:none;
+border-radius:15px;
+font-size:17px;
+font-weight:700;
+background:linear-gradient(135deg,#7b2cff,#9b5cff);
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.buy:hover{
+transform:translateY(-4px);
+box-shadow:0 0 25px #9b5cff;
+}
+
+/* STATS */
+
+.stats{
+margin-top:80px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+}
+
+.stat{
+background:rgba(12,12,12,.85);
+border:1px solid #1f1f1f;
+padding:35px;
+border-radius:22px;
+text-align:center;
+}
+
+.stat h2{
+font-size:60px;
+margin-bottom:10px;
+color:#9b5cff;
+}
+
+/* DISCORD */
+
+.discord{
+position:relative;
+overflow:hidden;
+margin-top:100px;
+padding:90px 40px;
+border-radius:35px;
+background:linear-gradient(135deg,#7b2cff,#9b5cff);
+text-align:center;
+}
+
+.discord::before{
+content:'';
+position:absolute;
+width:500px;
+height:500px;
+background:#ffffff18;
+border-radius:50%;
+top:-220px;
+right:-100px;
+filter:blur(50px);
+}
+
+.discord h2{
+font-size:60px;
+margin-bottom:20px;
+position:relative;
+z-index:2;
+}
+
+.discord p{
+font-size:22px;
+margin-bottom:35px;
+position:relative;
+z-index:2;
+}
+
+.discord .btn{
+background:white;
+color:#7b2cff;
+position:relative;
+z-index:2;
+}
+
+/* FOOTER */
+
+footer{
+padding:50px 0;
+text-align:center;
+color:#7a7a7a;
+border-top:1px solid #161616;
+margin-top:120px;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+.hero-wrap{
+grid-template-columns:1fr;
+text-align:center;
+}
+
+.hero-buttons{
+justify-content:center;
+}
+
+.hero-text h1{
+font-size:65px;
+}
+
+.links{
+display:none;
+}
+
+}
+
+@media(max-width:600px){
+
+.hero-text h1{
+font-size:50px;
+}
+
+.hero-text p{
+font-size:18px;
+}
+
+.section-title{
+font-size:40px;
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-  <!-- الشريط الجانبي -->
-  <aside class="sidebar">
-    <div class="logo-box">
-      <div class="logo-title">KWAI</div>
-      <div class="logo-sub">مساعد ذكاء اصطناعي كويتي</div>
-    </div>
+<div class="bg"></div>
+<div class="grid"></div>
 
-    <div>
-      <div class="side-heading">الجلسات</div>
-      <button class="side-btn">
-        محادثة جديدة
-        <span>Ctrl + N</span>
-      </button>
-      <button class="side-btn">
-        السجل
-        <span>قريباً</span>
-      </button>
-    </div>
+<header>
 
-    <div>
-      <div class="side-heading">النظام</div>
-      <button class="side-btn">
-        إعدادات Kwai
-        <span>قريباً</span>
-      </button>
-      <button class="side-btn">
-        عن Kwai
-        <span>v0.1</span>
-      </button>
-    </div>
+<div class="container nav">
 
-    <div class="side-footer">
-      Kwai · نموذج تجريبي  
-      حالياً بدون ربط API حقيقي،  
-      لكن جاهز للربط لاحقاً.
-    </div>
-  </aside>
+<div class="logo">
 
-  <!-- منطقة الشات -->
-  <main class="chat-wrapper">
-    <header class="chat-header">
-      <div class="chat-header-title">
-        مرحباً بك في <strong>Kwai</strong>… اسألني أي شيء بالعربي أو الإنجليزي.
-      </div>
-      <div class="chat-header-badge">
-        وضع نيون · تجربة مبكرة
-      </div>
-    </header>
+<img src="logo.png">
 
-    <section class="messages" id="messages">
-      <div class="message ai">
-        أهلاً، أنا <strong>Kwai</strong>، مساعد ذكاء اصطناعي بواجهة نيون مستقبلية.
-        <br>
-        اكتب سؤالك في الأسفل واضغط إرسال.
-        <small>نموذج تجريبي · الردود حالياً ليست حقيقية 100%</small>
-      </div>
-    </section>
+<h1>MINITY</h1>
 
-    <footer class="input-area">
-      <div class="input-inner">
-        <input
-          id="userInput"
-          type="text"
-          placeholder="اكتب رسالتك هنا... ثم اضغط Enter أو زر إرسال"
-          onkeydown="if (event.key === 'Enter') sendMessage();"
-        />
-        <button class="send-btn" onclick="sendMessage()">إرسال</button>
-      </div>
-    </footer>
-  </main>
+</div>
 
-  <script>
-    function sendMessage() {
-      const input = document.getElementById('userInput');
-      const messages = document.getElementById('messages');
-      const text = input.value.trim();
+<div class="links">
 
-      if (!text) return;
+<a href="#">الرئيسية</a>
+<a href="#">الباقات</a>
+<a href="#">السيارات</a>
+<a href="#">العملات</a>
+<a href="#">الأسلحة</a>
+<a href="#">الدعم</a>
 
-      // رسالة المستخدم
-      const userMsg = document.createElement('div');
-      userMsg.className = 'message user';
-      userMsg.textContent = text;
-      messages.appendChild(userMsg);
+</div>
 
-      // الرد التجريبي من Kwai
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'message ai';
-      aiMsg.innerHTML =
-        'تم استلام سؤالك 👌<br>' +
-        'في النسخة الجاية بنربط <strong>Kwai</strong> بنموذج ذكاء اصطناعي حقيقي، ' +
-        'لكن الآن أقدر أظهر لك أنه جاهز للشغل.';
+<button class="login"
+onclick="window.open('https://discord.gg/MT-3')">
+دخول
+</button>
 
-      messages.appendChild(aiMsg);
+</div>
 
-      // نزول لأسفل المحادثة
-      messages.scrollTop = messages.scrollHeight;
+</header>
 
-      // تفريغ الخانة
-      input.value = '';
-      input.focus();
-    }
+<section class="hero">
 
-    fetch("kwai.php", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message: text })
-})
-    
-    
-  </script>
+<div class="container hero-wrap">
+
+<div class="hero-img">
+
+<img src="logo.png">
+
+</div>
+
+<div class="hero-text">
+
+<h1>
+MINITY STORE
+</h1>
+
+<p>
+متجر فايف ام احترافي بتصميم عصري ونظام تسليم تلقائي سريع وآمن 100%
+</p>
+
+<div class="hero-buttons">
+
+<button class="btn btn-primary">
+تصفح المتجر
+</button>
+
+<button class="btn btn-dark"
+onclick="window.open('https://discord.gg/MT-3')">
+
+<i class="fa-brands fa-discord"></i>
+انضم للديسكورد
+
+</button>
+
+</div>
+
+<div class="features">
+
+<div class="feature">
+
+<i class="fa-solid fa-bolt"></i>
+
+<h3>تسليم فوري</h3>
+
+<p>
+تسليم تلقائي لجميع المنتجات خلال ثواني
+</p>
+
+</div>
+
+<div class="feature">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<h3>أمان كامل</h3>
+
+<p>
+حماية عالية لجميع بيانات العملاء والمدفوعات
+</p>
+
+</div>
+
+<div class="feature">
+
+<i class="fa-solid fa-headset"></i>
+
+<h3>دعم فني</h3>
+
+<p>
+فريق دعم متواجد على مدار الساعة لخدمتك
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<h2 class="section-title">
+أقوى الباقات
+</h2>
+
+<p class="section-desc">
+اختر الباقة المناسبة لتجربة لعب أسطورية
+</p>
+
+<div class="products">
+
+<div class="card">
+
+<h3>VIP Bronze</h3>
+
+<ul>
+
+<li><i class="fa-solid fa-check"></i> راتب يومي</li>
+<li><i class="fa-solid fa-check"></i> سيارات محدودة</li>
+<li><i class="fa-solid fa-check"></i> مميزات أساسية</li>
+
+</ul>
+
+<div class="price">
+5$
+</div>
+
+<button class="buy">
+شراء الآن
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>VIP Silver</h3>
+
+<ul>
+
+<li><i class="fa-solid fa-check"></i> راتب أكبر</li>
+<li><i class="fa-solid fa-check"></i> سيارات حصرية</li>
+<li><i class="fa-solid fa-check"></i> أولوية دخول</li>
+
+</ul>
+
+<div class="price">
+10$
+</div>
+
+<button class="buy">
+شراء الآن
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>VIP Gold</h3>
+
+<ul>
+
+<li><i class="fa-solid fa-check"></i> جميع المميزات</li>
+<li><i class="fa-solid fa-check"></i> دعم خاص</li>
+<li><i class="fa-solid fa-check"></i> محتوى حصري</li>
+
+</ul>
+
+<div class="price">
+20$
+</div>
+
+<button class="buy">
+شراء الآن
+</button>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<h2>542</h2>
+<p>لاعب متصل الآن</p>
+</div>
+
+<div class="stat">
+<h2>1248</h2>
+<p>عملية شراء</p>
+</div>
+
+<div class="stat">
+<h2>99%</h2>
+<p>رضا العملاء</p>
+</div>
+
+<div class="stat">
+<h2>#1</h2>
+<p>أفضل متجر فايف ام</p>
+</div>
+
+</div>
+
+<div class="discord">
+
+<h2>
+انضم إلى ديسكورد MINITY
+</h2>
+
+<p>
+تابع آخر الأخبار والعروض والتحديثات الحصرية
+</p>
+
+<button class="btn"
+onclick="window.open('https://discord.gg/MT-3')">
+
+<i class="fa-brands fa-discord"></i>
+انضم الآن
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+© 2026 MINITY STORE - ALL RIGHTS RESERVED
+
+</footer>
 
 </body>
 </html>
+```
